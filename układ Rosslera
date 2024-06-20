@@ -1,0 +1,67 @@
+class Rossler{
+//poczatkowy stan ukladu
+    constructor(x0,y0,z0){
+        this.x=x0
+        this.y=y0
+        this.z=z0
+
+//Rössler studied the chaotic attractor with: a=0,2 b=0,2 c=5,7
+        this.a=0.2
+        this.b=0.2
+        this.c=5.7
+
+        this.points=[];
+    }
+    change(dt){
+        //jak sie zmienia za jakis czas t
+        let dx=(-this.y-this.z)*dt;
+        let dy=(this.x+(this.a*this.y))*dt;
+        let dz=(this.b+(this.z*(this.x-this.c)))*dt;
+
+        this.x=this.x+dx;
+        this.y=this.y+dy;
+        this.z=this.z+dz;
+
+        this.points.push(new p5.Vector(this.x,this.y,this.z));//zapisywnie punktu
+
+
+    }
+
+    show(){
+        stroke('white');
+        noFill();
+        beginShape();
+        for(let p of this.points){
+
+            vertex(p.x,p.y,p.z);
+
+        }
+
+        endShape();
+
+    }
+
+}
+
+let rossler;
+
+function setup() {
+    let canvas = createCanvas(1600, 1600,WEBGL);//wymiar3-d
+
+    rossler=new Rossler(1,1,1);
+
+
+    //podlaczenie biblioteki dla przesuniecie kursorem
+    canvas.elt.oncontextmenu=()=>false;
+    createEasyCam();
+}
+
+function draw() {
+
+    background('black')
+
+    scale(5)
+
+    rossler.change(0.05)
+    rossler.show();
+}
